@@ -1,0 +1,43 @@
+#include <SPI.h>
+#include <nRF24L01.h>
+#include <RF24.h>
+#include <Servo.h>
+
+RF24 radio(9, 10);
+const byte addr[6] = "00001";
+
+struct Packet {
+  int16_t btn;
+  int16_t angle;
+};
+
+Packet p;
+Servo s;
+
+const int servoPin = 8;
+const int ledPin = 4;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(ledPin, OUTPUT);
+  s.attach(servoPin);
+
+  radio.begin();
+  radio.setChannel(110);
+  radio.setDataRate(RF24_250KBPS);
+  radio.setPALevel(RF24_PA_HIGH);
+  radio.setCRCLength(RF24_CRC_16);
+  radio.setAutoAck(true);
+
+  radio.openReadingPipe(1, addr);
+  radio.startListening();
+}
+
+void loop() {
+  if (radio.available()) {
+    radio.read(&p, sizeof(p));
+
+    digitalWrite(ledPin, (p.btn == 50) ? HIGH : LOW);
+    s.write(constrain(p.angle, 0, 180));
+  }
+}
