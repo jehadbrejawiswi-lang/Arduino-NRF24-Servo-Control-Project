@@ -1,0 +1,42 @@
+#include <SPI.h>
+#include <nRF24L01.h>
+#include <RF24.h>
+
+RF24 radio(9, 10);
+const byte addr[6] = "00001";
+
+struct Packet {
+  int16_t btn;
+  int16_t angle;
+};
+
+Packet p;
+
+const int X_PIN = A0;
+const int SW_PIN = 3;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(SW_PIN, INPUT_PULLUP);
+
+  radio.begin();
+  radio.setChannel(110);
+  radio.setDataRate(RF24_250KBPS);
+  radio.setPALevel(RF24_PA_MAX);
+  radio.setCRCLength(RF24_CRC_16);
+  radio.setAutoAck(true);
+
+  radio.openWritingPipe(addr);
+  radio.stopListening();
+}
+
+void loop() {
+  int xRaw = analogRead(X_PIN);
+  bool swPressed = (digitalRead(SW_PIN) == LOW);
+
+  p.btn = swPressed ? 50 : 0;
+  p.angle = map(xRaw, 0, 1023, 0, 180);
+
+  radio.write(&p, sizeof(p));
+  delay(40);
+}
