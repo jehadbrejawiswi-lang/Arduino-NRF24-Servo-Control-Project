@@ -1,0 +1,61 @@
+# Arduino NRF24 Servo Control Project
+
+## Overview
+
+This project is a wireless transmitter and receiver system using Arduino, NRF24L01 modules, a joystick, a push button, an LED, and a servo motor.
+
+The transmitter reads joystick movement and button status, then sends the data wirelessly using the NRF24L01 module.
+
+The receiver gets the data, controls the servo motor angle based on the joystick position, and turns the LED on or off depending on the button state.
+
+## Features
+
+* Wireless communication using NRF24L01
+* Joystick control for servo angle
+* Push button control for LED
+* Real-time data transmission
+* Servo motor movement from 0 to 180 degrees
+* LED ON/OFF control using button press
+
+## Components Used
+
+* 2x Arduino boards
+* 2x NRF24L01 modules
+* 1x Joystick module
+* 1x Servo motor
+* 1x LED
+* 1x Resistor for LED
+* Jumper wires
+* Breadboard
+
+## Technologies Used
+
+* Arduino IDE
+* C++
+* SPI Library
+* RF24 Library
+* Servo Library
+
+## How It Works
+
+### Transmitter
+
+* Reads joystick X-axis value
+* Reads push button state
+* Maps joystick value to servo angle (0–180)
+* Sends the packet using NRF24L01
+
+### Receiver
+
+* Receives data packet
+* Moves servo motor to the received angle
+* Turns LED ON when button is pressed
+* Turns LED OFF when button is released
+
+## Purpose
+
+This project was created to demonstrate wireless communication between two Arduino devices and real-time control of hardware components using NRF24L01 modules.
+
+## Author
+
+Cihat Brejavi
